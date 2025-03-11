@@ -54,7 +54,16 @@ export const createPost = async (req, resp) => {
 
 // fetch all post
 export const fetchAllPost = async (req, resp) => {
-  const posts = await prisma.post.findMany();
+  const posts = await prisma.post.findMany({
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+  
   try {
     return resp.json({ status: 200, success: true, data: posts });
   } catch (error) {
