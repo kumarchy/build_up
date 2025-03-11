@@ -26,7 +26,7 @@ const PersonalProjects = () => {
   };
 
   const handleDeleteClick = (projectId) => {
-    deleteProjects(projectId);
+    deleteProjects(projectId, userId);
     setDeleteBoxVisibleFor(null);
   };
 

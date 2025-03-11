@@ -30,11 +30,12 @@ model Post{
   id Int @id @default(autoincrement())
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id Int
-  title String
-  description String
-  techStack     String  @default("")
-  githubLink    String  @default("")
-  deployedLink  String  @default("")
+  title String?
+  description String?
+  techStack     String?
+  githubLink    String?
+  deployedLink String?
+  image_url    String?
   comment Comment[]
   like Like[]
   comment_count Int       @default(0)

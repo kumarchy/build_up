@@ -1,11 +1,12 @@
 import e from "express";
 import prisma from "../db/db.config.js";
+import cloudinary from "cloudinary";
 
 // create a post
 export const createPost = async (req, resp) => {
-  const { user_id, title, description, githubLink, techStack, deployedLink } = req.body;
-
-  if (!title || !description || !githubLink || !techStack || !deployedLink) {
+  const { user_id, title, description, githubLink, techStack, deployedLink} = req.body;
+  // || !image_url
+  if (!title || !description || !githubLink || !techStack || !deployedLink ) {
     return resp.json({
       status: 400,
       success: false,
@@ -13,7 +14,15 @@ export const createPost = async (req, resp) => {
     });
   }
 
+  console.log(user_id,title,description,githubLink,techStack,deployedLink);
+
   try {
+    // const cloudinary_res = await cloudinary.uploader.upload(image_url,{
+    //   folder:"/buildUp-Images",
+    // });
+    
+    // console.log(cloudinary_res);
+
     const newPost = await prisma.post.create({
       data: {
         user_id: Number(user_id),
@@ -22,6 +31,7 @@ export const createPost = async (req, resp) => {
         githubLink: githubLink,
         techStack: techStack,
         deployedLink: deployedLink,
+        // image_url: cloudinary_res.secure_url,      
       },
     });
 

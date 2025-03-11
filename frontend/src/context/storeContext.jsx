@@ -42,13 +42,13 @@ const StoreContextProvider = (props) => {
   };
 
   // Delete project
-  const deleteProjects = async (postId) => {
+  const deleteProjects = async (postId, userId) => {
     try {
       const response = await axios.delete(`${url}/api/post/${postId}`);
       if (response.data.success) {
         console.log("Post deleted successfully");
         // Optionally refresh projects after deletion
-        showProjects();
+        showProjects(userId);
       }
     } catch (error) {
       console.log(error);
