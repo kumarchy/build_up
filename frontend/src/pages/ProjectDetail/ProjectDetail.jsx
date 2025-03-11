@@ -33,7 +33,7 @@ const ProjectDetail = () => {
           </h1>
         </div>
         <div>
-          <img src="/frontend coffee webpage.png" alt="Coffee Webpage" />
+          <img src="/resume.png" alt="Coffee Webpage" />
         </div>
         <div className="flex gap-5 m">
           <p>likes</p>

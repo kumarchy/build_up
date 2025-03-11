@@ -10,7 +10,7 @@ const PersonalProjects = () => {
 
   const { userId } = useParams();
 
-  const { showPersonalPost, showProjects, deleteProjects } =
+  const { showPersonalPost, showProjects, deleteProjects ,getDaysAgo,} =
     useContext(StoreContext);
 
   useEffect(() => {
@@ -75,7 +75,8 @@ const PersonalProjects = () => {
                           {project.title}
                         </h1>
                         <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-                          Posted by John Doe • 2 days ago
+                        Posted by {project.user?.name} •{" "}
+                        {getDaysAgo(project.created_at)}
                         </p>
                       </div>
 
