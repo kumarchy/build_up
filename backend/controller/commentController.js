@@ -33,7 +33,16 @@ export const createComment = async (req, resp) => {
 
 // // fetch all comments
 export const fetchAllComment = async(req, resp)=>{
-  const comment = await prisma.post.findMany();
+  const comment = await prisma.comment.findMany({
+    include: {
+      user: {
+        select: {
+          name: true,
+          email: true,
+        },
+      },
+    },
+  });
   return resp.json({status:200, data:comment}
   )
 }
