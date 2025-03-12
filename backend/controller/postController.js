@@ -78,6 +78,7 @@ export const fetchAllPost = async (req, resp) => {
 // show perticular post comment
 export const showPost = async (req, resp) => {
   const user_id = req.params.user_id;
+  console.log("user id is ",user_id);
 
   try {
     const posts = await prisma.post.findMany({
