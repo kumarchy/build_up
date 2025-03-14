@@ -3,7 +3,7 @@ import axios from "axios";
 
 const Form = () => {
   const [image, setImage] = useState(null);
-  // const [preview, setPreview] = useState("");
+  const [preview, setPreview] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -29,17 +29,17 @@ const Form = () => {
 
     if (selectedFile && selectedFile.type.startsWith("image/")) {
       const imageURL = URL.createObjectURL(selectedFile);
-      setImage(imageURL);
+      setImage(imageURL);  
     } else {
       alert("Please upload a valid image file.");
     }
 
-    // ---cloudinary part---
-    // var reader = new FileReader();
-    // reader.onloadend = function(){
-    //   setPreview(reader.result);
-    // };
-    // reader.readAsDataURL(selectedFile);
+  // ---cloudinary part---
+    var reader = new FileReader();
+    reader.onloadend = function(){
+      setPreview(reader.result);
+    };
+    reader.readAsDataURL(selectedFile);
   };
 
   const handleChange = (e) => {
@@ -64,7 +64,7 @@ const Form = () => {
       techStack: formData.techStack,
       githubLink: formData.githubLink,
       deployedLink: formData.deployedLink,
-      // image_url: preview
+      image_url: preview,
     };
 
     try {
@@ -104,6 +104,7 @@ const Form = () => {
               <span>Drag and Drop Project HomePage</span>
             )}
           </div>
+          
           <input
             type="file"
             id="fileInput"

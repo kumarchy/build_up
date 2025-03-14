@@ -35,10 +35,7 @@ const ProjectDetail = () => {
         <div>
           <img src="/resume.png" alt="Coffee Webpage" />
         </div>
-        <div className="flex gap-5 m">
-          <p>likes</p>
-          <p>comments</p>
-        </div>
+        
         <div className="mt-4">
           <h1 className="text-lg font-semibold">Project Description</h1>
           <p>{project.description}</p>

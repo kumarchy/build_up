@@ -1,27 +1,33 @@
+import dotenv from 'dotenv';
+dotenv.config(); 
+
 import e from "express";
 import prisma from "../db/db.config.js";
-import cloudinary from "cloudinary";
+import cloudinary from '../cloudinary.js';
 
 // create a post
 export const createPost = async (req, resp) => {
-  const { user_id, title, description, githubLink, techStack, deployedLink} = req.body;
-  // || !image_url
-  if (!title || !description || !githubLink || !techStack || !deployedLink ) {
-    return resp.json({
-      status: 400,
-      success: false,
-      message: "Enter the required field",
-    });
-  }
-
-  console.log(user_id,title,description,githubLink,techStack,deployedLink);
+  const { user_id, title, description, githubLink, techStack, deployedLink, image_url} = req.body;
 
   try {
-    // const cloudinary_res = await cloudinary.uploader.upload(image_url,{
-    //   folder:"/buildUp-Images",
-    // });
-    
-    // console.log(cloudinary_res);
+    if (!title || !description || !githubLink || !techStack || !deployedLink || !image_url) {
+      return resp.json({
+        status: 400,
+        success: false,
+        message: "Enter the required field",
+      });
+    }
+
+    const cloudinary_res = await cloudinary.uploader.upload(image_url, {          
+      folder: "cloudinary-demo"
+  });
+
+  console.log("Upload Successful:", cloudinary_res);
+
+  // resp.json({ 
+  //     message: "Image uploaded successfully", 
+  //     url: cloudinary_res.secure_url 
+  // });
 
     const newPost = await prisma.post.create({
       data: {
@@ -31,7 +37,7 @@ export const createPost = async (req, resp) => {
         githubLink: githubLink,
         techStack: techStack,
         deployedLink: deployedLink,
-        // image_url: cloudinary_res.secure_url,      
+        image_url: cloudinary_res.secure_url,      
       },
     });
 
@@ -134,6 +140,49 @@ export const deletePost = async (req, resp) => {
     return resp.json({
       status: 400,
       messsage: "An error occurred while fetching posts",
+    });
+  }
+};
+
+// search post
+export const searchPost = async (req, resp) => {
+  const search = req.query.search;
+  console.log("search term is ", search);
+  try {
+    const posts = await prisma.post.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+          {
+            description: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+          {
+            techStack: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+        ],
+      },
+    });
+
+    return resp.json({
+      status: 200,
+      data: posts,
+    });
+  } catch (error) {
+    console.error("Error fetching search results:", error);
+    return resp.status(500).json({
+      status: 500,
+      message: "An error occurred while fetching search results",
     });
   }
 };

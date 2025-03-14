@@ -7,11 +7,16 @@ import { StoreContext } from '../../context/storeContext';
 const Navbar = ({ setShowSignup }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileVisible, setIsProfileVisible] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(''); 
-  
-  const{searchPost} = useContext(StoreContext);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  searchPost(searchTerm);
+  const { searchPost } = useContext(StoreContext);
+
+  const handleSearch = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+    searchPost(term); // Call the searchPost function with the search term
+  };
+
   return (
     <nav className="bg-[#0F1B21] shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -37,14 +42,17 @@ const Navbar = ({ setShowSignup }) => {
               <input
                 type="text"
                 placeholder="Search..."
-                className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" onChange={(e)=>setSearchTerm(e.target.value)}
+                className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onChange={handleSearch} // Call handleSearch on input change
                 value={searchTerm}
               />
               <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
             </div>
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer"
-                   onClick={() => setIsProfileVisible(!isProfileVisible)}>
+              <div
+                className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer"
+                onClick={() => setIsProfileVisible(!isProfileVisible)}
+              >
                 <User className="h-5 w-5 text-gray-500" />
                 {isProfileVisible && (
                   <div className="absolute bg-white shadow-lg rounded-lg p-2 right-20" onClick={() => setShowSignup(true)}>
@@ -75,11 +83,19 @@ const Navbar = ({ setShowSignup }) => {
           <div className="pt-4 pb-3 border-t border-gray-200">
             <div className="px-4 flex items-center space-x-4">
               <div className="relative flex-1">
-                <input type="text" placeholder="Search..." className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  onChange={handleSearch} // Call handleSearch on input change
+                  value={searchTerm}
+                />
                 <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
               </div>
-              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer"
-                   onClick={() => setIsProfileVisible(!isProfileVisible)}>
+              <div
+                className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer"
+                onClick={() => setIsProfileVisible(!isProfileVisible)}
+              >
                 <User className="h-5 w-5 text-gray-500" />
               </div>
             </div>
