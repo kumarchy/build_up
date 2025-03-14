@@ -8,6 +8,7 @@ const Form = () => {
     title: "",
     description: "",
     techStack: "",
+    type:"",
     githubLink: "",
     deployedLink: "",
   });
@@ -62,6 +63,7 @@ const Form = () => {
       title: formData.title,
       description: formData.description,
       techStack: formData.techStack,
+      type: formData.type,
       githubLink: formData.githubLink,
       deployedLink: formData.deployedLink,
       image_url: preview,
@@ -83,6 +85,7 @@ const Form = () => {
           title: "",
           description: "",
           techStack: "",
+          type:"",
           githubLink: "",
           deployedLink: "",
         });
@@ -110,7 +113,7 @@ const Form = () => {
             {image ? (
               <img src={image} alt="Preview" className="w-full max-h-full" />
             ) : (
-              <span>Drag and Drop Project HomePage</span>
+              <span className="text-zinc-500">Drag and Drop Project HomePage</span>
             )}
           </div>
           
@@ -142,6 +145,14 @@ const Form = () => {
             name="techStack"
             value={formData.techStack}
             placeholder="TechStack"
+            onChange={handleChange}
+            className="border-[1px] p-2 outline-none dark:bg-zinc-800 text-white"
+          />
+          <input
+            type="text"
+            name="type"
+            value={formData.type}
+            placeholder="Type/Category Followed By #"
             onChange={handleChange}
             className="border-[1px] p-2 outline-none dark:bg-zinc-800 text-white"
           />

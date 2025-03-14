@@ -7,10 +7,10 @@ import cloudinary from '../cloudinary.js';
 
 // create a post
 export const createPost = async (req, resp) => {
-  const { user_id, title, description, githubLink, techStack, deployedLink, image_url} = req.body;
+  const { user_id, title, description, githubLink, techStack, type, deployedLink, image_url} = req.body;
 
   try {
-    if (!title || !description || !githubLink || !techStack || !deployedLink || !image_url) {
+    if (!title || !description || !githubLink || !techStack || !type || !deployedLink || !image_url) {
       return resp.json({
         status: 400,
         success: false,
@@ -31,6 +31,7 @@ export const createPost = async (req, resp) => {
         description: description,
         githubLink: githubLink,
         techStack: techStack,
+        type: type,
         deployedLink: deployedLink,
         image_url: cloudinary_res.secure_url,      
       },

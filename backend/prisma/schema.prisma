@@ -33,6 +33,7 @@ model Post{
   title String?
   description String?
   techStack     String?
+  type       String?
   githubLink    String?
   deployedLink String?
   image_url    String?
