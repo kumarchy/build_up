@@ -27,13 +27,13 @@ const ProjectDetail = () => {
   return (
     <div className="relative flex flex-col items-center dark:bg-zinc-900 text-white">
       <div className="md:w-[70%] w-[95%]">
-        <div className="flex items-center gap-5 mb-2 mt-3">
-          <h1 className="sm:text-3xl text-2xl sm:font-bold font-bold ">
+        <div className="flex items-center gap-5 mb-5 mt-5">
+          <h1 className="sm:text-4xl text-2xl sm:font-bold font-bold ">
             {project.title}
           </h1>
         </div>
         <div>
-          <img src="/resume.png" alt="Coffee Webpage" />
+          <img className="md:h-[500px] w-full h-[350px]" src={project.image_url} alt={project.image_url} />
         </div>
         
         <div className="mt-4">

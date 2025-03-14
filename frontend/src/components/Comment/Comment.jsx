@@ -1,5 +1,5 @@
 import { Send, X } from "lucide-react";
-import { use, useContext, useState } from "react";
+import { use, useContext, useEffect, useState } from "react";
 import { StoreContext } from "../../context/storeContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -9,11 +9,15 @@ const Comment = ({ isOpen, onClose, post_id }) => {
     showComment} =
     useContext(StoreContext);
 
-  if (!isOpen) return null;
-  if(isOpen){
-    getComment(post_id);
-  }
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isOpen) {
+      getComment(post_id);
+    }
+  }, [isOpen, post_id, getComment]); 
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">

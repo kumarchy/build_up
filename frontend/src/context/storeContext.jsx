@@ -87,6 +87,7 @@ const StoreContextProvider = (props) => {
       );
       if (response.data.success) {
         setComment("");
+        getComment(post_id);
       }
     } catch (error) {
       console.error("Error creating comment:", error);
@@ -140,7 +141,7 @@ const StoreContextProvider = (props) => {
       console.log("Error getting like count", error);
     }
   };
-
+ 
   const getDaysAgo = (createdAt) => {
     const createdDate = new Date(createdAt);
     const currentDate = new Date();
@@ -151,7 +152,7 @@ const StoreContextProvider = (props) => {
     if (daysAgo === 1) return "1 day ago";
     return `${daysAgo} days ago`;
   };
-
+  
   const contextValue = {
     showPersonalPost,
     showProjects,

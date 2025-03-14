@@ -24,11 +24,6 @@ export const createPost = async (req, resp) => {
 
   console.log("Upload Successful:", cloudinary_res);
 
-  // resp.json({ 
-  //     message: "Image uploaded successfully", 
-  //     url: cloudinary_res.secure_url 
-  // });
-
     const newPost = await prisma.post.create({
       data: {
         user_id: Number(user_id),
