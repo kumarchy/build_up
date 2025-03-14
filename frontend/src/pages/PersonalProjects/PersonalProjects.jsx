@@ -4,9 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import { StoreContext } from "../../context/storeContext";
+import Comment from "../../components/Comment/Comment";
 
 const PersonalProjects = () => {
   const [deleteBoxVisibleFor, setDeleteBoxVisibleFor] = useState(null);
+  const [openCommentPostId, setOpenCommentPostId] = useState(null);
 
   const { userId } = useParams();
 
@@ -80,9 +82,11 @@ const PersonalProjects = () => {
                         </p>
                       </div>
 
-                      <p className="text-zinc-600 dark:text-zinc-300 leading-relaxed">
-                        {project.description}
-                      </p>
+                     
+                  <p className="text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                    {project.description.split(" ").slice(0, 25).join(" ")}
+                    {project.description.split(" ").length > 25 ? "..." : ""}
+                  </p>
 
                       <div className="h-px bg-zinc-200 dark:bg-zinc-700" />
 
@@ -96,13 +100,29 @@ const PersonalProjects = () => {
                           <ThumbsDown className="h-4 w-4" />
                           <span className="hidden sm:block">Dislike</span>
                         </button>
-                        <button className="flex items-center gap-1 rounded-lg px-1 md:px-2 py-1 text-xs md:text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-700 shrink-0">
+                        <button className="flex items-center gap-1 rounded-lg px-1 md:px-2 py-1 text-xs md:text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-700 shrink-0" 
+                        onClick={() =>
+                          setOpenCommentPostId(
+                            openCommentPostId === project.id ? null : project.id
+                          )
+                        }
+                        >
                           <MessageCircle className="h-4 w-4" />
-                          <span className="hidden sm:block">Comment</span>
+                          <p className="text-white underline">
+                        {project.comment_count} comments
+                      </p>
                         </button>
                       </div>
                     </div>
                   </section>
+                  {openCommentPostId === project.id && (
+              <Comment
+                isOpen={true}
+                onClose={() => setOpenCommentPostId(null)}
+                comments={project.comment || []}
+                post_id={project.id}
+              />
+            )}
 
                   <FontAwesomeIcon
                     icon={faEllipsisV}
