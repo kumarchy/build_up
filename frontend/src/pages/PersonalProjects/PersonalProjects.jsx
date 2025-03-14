@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Heart, MessageCircle, ThumbsDown, ExternalLink } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { StoreContext } from "../../context/storeContext";
 import Comment from "../../components/Comment/Comment";
 
@@ -58,13 +58,13 @@ const PersonalProjects = () => {
                   <section className="w-full md:w-[55%] p-6">
                     <div className="flex items-start gap-4">
                       <div className="flex-1 space-y-4">
-                        <div className="h-64 md:h-80 overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-700">
+                        <Link to={`/projectDetail/${project.id}`} className="h-64 md:h-80 overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-700">
                           <img
                             src={project.image_url}
                             alt="Project Preview"
                             className="h-full w-full object-cover"
                           />
-                        </div>
+                        </Link>
                       </div>
                     </div>
                   </section>

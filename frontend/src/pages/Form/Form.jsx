@@ -77,10 +77,19 @@ const Form = () => {
           },
         }
       );
-      alert("Post created successfully!");
-      console.log(response.data);
+      if(response.data.success){
+        alert("Post created successfully!");
+        setFormData({
+          title: "",
+          description: "",
+          techStack: "",
+          githubLink: "",
+          deployedLink: "",
+        });
+        setImage(null);
+      }
+      
     } catch (error) {
-      console.error("Error creating post:", error);
       alert("Failed to create post. Please try again.");
     }
   };

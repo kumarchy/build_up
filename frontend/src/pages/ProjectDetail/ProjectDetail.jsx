@@ -36,11 +36,11 @@ const ProjectDetail = () => {
           <img className="md:h-[500px] w-full h-[350px]" src={project.image_url} alt={project.image_url} />
         </div>
         
-        <div className="mt-4">
-          <h1 className="text-lg font-semibold">Project Description</h1>
+        <div className="mt-6">
+          <h1 className="text-xl font-semibold">Project Description</h1>
           <p>{project.description}</p>
           <div className="mt-4">
-            <h1 className="text-lg font-semibold">Tech stack</h1>
+            <h1 className="text-xl font-semibold">Tech stack</h1>
             <ul className="sm:gap-8 gap-5 list-disc ml-6">
               {techStackArray.length > 0 ? (
                 techStackArray.map((tech, index) => <li key={index}>{tech}</li>)
@@ -51,7 +51,7 @@ const ProjectDetail = () => {
           </div>
 
           <div className="mt-4">
-            <h1 className="text-lg font-semibold">Project References</h1>
+            <h1 className="text-xl font-semibold">Project References</h1>
             <ul className="list-disc ml-6">
               <li>React.js doc</li>
               <li>JavaScript doc</li>
@@ -62,7 +62,7 @@ const ProjectDetail = () => {
 
           {project.deployedLink && (
             <div className="mt-4">
-              <h1 className="text-lg font-semibold">Visit Website</h1>
+              <h1 className="text-xl font-semibold">Visit Website</h1>
               <a
                 href={project.deployedLink}
                 target="_blank"
@@ -76,7 +76,7 @@ const ProjectDetail = () => {
 
           {project.githubLink && (
             <div className="mt-4 pb-16">
-              <h1 className="text-lg font-semibold">Visit GitHub Repository</h1>
+              <h1 className="text-xl font-semibold">Visit GitHub Repository</h1>
               <a
                 href={project.githubLink}
                 target="_blank"
