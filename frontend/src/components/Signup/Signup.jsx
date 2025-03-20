@@ -20,7 +20,7 @@ const Signup = () => {
       if (isSignup) {
         // Signup request
         const response = await axios.post(
-          "http://localhost:3000/api/user/signup",
+          "https://build-up-backend.onrender.com/api/user/signup",
           formData
         );
         if (response.data.success) {
@@ -35,7 +35,7 @@ const Signup = () => {
       } else {
         // Signin request
         const response = await axios.post(
-          "http://localhost:3000/api/user/signin",
+          "https://build-up-backend.onrender.com/api/user/signin",
           { email: formData.email, password: formData.password }
         );
         if (response.data.success) {
