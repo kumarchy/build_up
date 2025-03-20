@@ -38,7 +38,7 @@ const ProjectDetail = () => {
         
         <div className="mt-6">
           <h1 className="text-xl font-semibold">Project Description</h1>
-          <p>{project.description}</p>
+          <p style={{ whiteSpace: "pre-wrap" }}>{project.description}</p>
           <div className="mt-4">
             <h1 className="text-xl font-semibold">Tech stack</h1>
             <ul className="sm:gap-8 gap-5 list-disc ml-6">

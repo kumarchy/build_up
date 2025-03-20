@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Search, User, Menu, X } from 'lucide-react';
 import Profile from '../Profile/Profile';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/storeContext';
 
 const Navbar = ({ setShowSignup }) => {
@@ -12,18 +12,20 @@ const Navbar = ({ setShowSignup }) => {
   const { searchPost } = useContext(StoreContext);
 
   const handleSearch = (e) => {
-    const term = e.target.value;
+    let term = e.target.value.replace(/#/g, ''); 
     setSearchTerm(term);
-    searchPost(term); // Call the searchPost function with the search term
-  };
+    searchPost(term); 
+  };  
+
+  const navigate = useNavigate();
 
   return (
     <nav className="bg-[#0F1B21] shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="flex-shrink-0">
-            <h1 className="text-xl font-bold text-white">Logo</h1>
+          <div className="w-40 cursor-pointer">
+            <img src="/buildUp.png" alt=""   onClick={() => navigate("/")}/>
           </div>
 
           {/* Desktop Navigation */}
@@ -55,7 +57,7 @@ const Navbar = ({ setShowSignup }) => {
               >
                 <User className="h-5 w-5 text-gray-500" />
                 {isProfileVisible && (
-                  <div className="absolute bg-white shadow-lg rounded-lg p-2 right-20" onClick={() => setShowSignup(true)}>
+                  <div className="absolute bg-white shadow-lg rounded-lg p-2 top-14" onClick={() => setShowSignup(true)}>
                     <Profile />
                   </div>
                 )}

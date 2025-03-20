@@ -9,13 +9,14 @@ import Homepage from "./pages/HomePage/Homepage";
 
 const App = () => {
   const [showSignup, setShowSignup] = useState(false);
-
+  
   return (
     <Router>
       <Navbar setShowSignup={setShowSignup} />
-      {showSignup && <Signup />}
+      {/* {showSignup && <Signup />} */}
       <Routes>
         <Route path="/" element={<Homepage />} />
+        <Route path="/signup" element={<Signup />}/>
         <Route path="/projectDetail/:projectId" element={<ProjectDetail />} />
         <Route path="/personalProjects/:userId" element={<PersonalProjects />} />
         <Route path="/form" element={<Form />} />

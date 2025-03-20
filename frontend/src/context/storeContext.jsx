@@ -56,19 +56,29 @@ const StoreContextProvider = (props) => {
   };
 
    // search project
-  const searchPost = async(searchTerm)=>{
-   try{
-    const response =await axios.get(`${url}/api/post/search`,{
-      params:{search : searchTerm}
-     })
-
-     if(Array.isArray(response.data.data)){
-      setShowAllPost(response.data.data);
-     }
-   }catch (error) {
-    console.error("Error fetching search results:", error);
-   }
-  }
+   const searchPost = async (searchTerm) => {
+    if (!searchTerm.trim()) {
+      console.log("Search term is empty");
+      return;
+    }
+  
+    const sanitizedSearch = searchTerm.replace(/#/g, '').trim();
+  
+    try {
+      const response = await axios.get(`${url}/api/post/search`, {
+        params: { search: sanitizedSearch },
+      });
+  
+      if (response.data.success && Array.isArray(response.data.data)) {
+        setShowAllPost(response.data.data);
+      } else {
+        console.log("No posts found");
+      }
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+    }
+  };
+  
   // create comment
   const handleCommentSubmit = async (e,post_id) => {
     e.preventDefault();

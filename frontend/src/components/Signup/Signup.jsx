@@ -57,16 +57,17 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-[80vh]">
+    <div className="flex justify-center items-center min-h-screen  dark:bg-zinc-900">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col justify-center items-center border-2 border-gray-500 gap-4 p-4"
+        className="flex flex-col justify-center items-center rounded-lg border-gray-500 gap-8 p-4 pl-8 pr-8 bg-white"
       >
-        <div>
-          <h1 className="text-xl">
-            {isSignup ? "Signup" : "Signin"} to BuildUp
-          </h1>
+        <div className="w-40">
+          <img src="/buildUp.png" alt="" />
+            {/* {isSignup ? "Signup" : "Signin"} */}
         </div>
+
+        <div className="flex flex-col gap-4 p-4">
         {isSignup && (
           <input
             type="text"
@@ -74,7 +75,7 @@ const Signup = () => {
             placeholder="Name"
             value={formData.name} // Bind value to formData
             onChange={handleChange}
-            className="p-2 sm:w-[250px] outline-none border-2 border-gray-500"
+            className="p-2 sm:w-[300px] outline-none border border-gray-500"
           />
         )}
         <input
@@ -83,7 +84,7 @@ const Signup = () => {
           placeholder="Email"
           value={formData.email} // Bind value to formData
           onChange={handleChange}
-          className="p-2 sm:w-[250px] outline-none border-2 border-gray-500"
+          className="p-2 sm:w-[300px] outline-none border border-gray-500"
         />
         <input
           type="password"
@@ -91,11 +92,11 @@ const Signup = () => {
           placeholder="Password"
           value={formData.password} // Bind value to formData
           onChange={handleChange}
-          className="p-2 sm:w-[250px] outline-none border-2 border-gray-500"
+          className="p-2 sm:w-[300px] outline-none border border-gray-500"
         />
         <button
           type="submit"
-          className="p-2 w-full outline-none border-2 border-gray-500"
+          className="p-2 w-full outline-none hover:bg-zinc-900 transition-all duration-300 delay-100 border hover:text-white border-gray-500"
         >
           {isSignup ? "Signup" : "Signin"}
         </button>
@@ -107,6 +108,8 @@ const Signup = () => {
             ? "Already have an account? Signin here"
             : "Don't have an account? Signup here"}
         </p>
+        </div>
+      
       </form>
     </div>
   );

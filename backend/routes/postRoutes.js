@@ -9,10 +9,10 @@ import {
 
 const postRouter = Router();
 
+postRouter.get("/search", searchPost);
 postRouter.post("/", createPost);
 postRouter.get("/", fetchAllPost);
 postRouter.get("/:user_id", showPost);
 postRouter.delete("/:id", deletePost);
-postRouter.get("/search", searchPost);
 
 export default postRouter;

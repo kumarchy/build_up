@@ -142,42 +142,37 @@ export const deletePost = async (req, resp) => {
 
 // search post
 export const searchPost = async (req, resp) => {
-  const search = req.query.search;
-  console.log("search term is ", search);
+  let search = req.query.search?.trim();
+
+  if (!search) {
+    return resp.status(400).json({ success: false, message: "Search term is required" });
+  }
+
+  // Remove '#' symbol from search query
+  search = search.replace(/#/g, '');
+
+  console.log("Processed search term:", search);
+
   try {
     const posts = await prisma.post.findMany({
       where: {
         OR: [
-          {
-            title: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-          {
-            description: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-          {
-            techStack: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
+          { title: { contains: search, mode: "insensitive" } },
+          { type: { contains: search, mode: "insensitive" } },
         ],
       },
     });
 
     return resp.json({
       status: 200,
+      success: true,
       data: posts,
     });
   } catch (error) {
     console.error("Error fetching search results:", error);
     return resp.status(500).json({
       status: 500,
+      success: false,
       message: "An error occurred while fetching search results",
     });
   }
