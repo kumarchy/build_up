@@ -10,7 +10,7 @@ const StoreContextProvider = (props) => {
   const [comment, setComment] = useState("");
   const [showComment, setShowComment] = useState([]);
 
-  const url = "http://localhost:3000";
+  const url = "https://build-up-backend.onrender.com";
 
   const user = JSON.parse(localStorage.getItem("user"));
 
