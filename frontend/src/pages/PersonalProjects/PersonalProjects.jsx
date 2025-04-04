@@ -12,7 +12,7 @@ const PersonalProjects = () => {
 
   const { userId } = useParams();
 
-  const { showPersonalPost, showProjects, deleteProjects ,getDaysAgo,} =
+  const { showPersonalPost, showProjects, deleteProjects ,getDaysAgo,user} =
     useContext(StoreContext);
 
   useEffect(() => {
@@ -126,6 +126,8 @@ const PersonalProjects = () => {
               />
             )}
 
+             {user?.id === project.user_id && ( 
+              <>
                   <FontAwesomeIcon
                     icon={faEllipsisV}
                     className="text-white absolute top-6 sm:right-5 right-2 cursor-pointer text-xl"
@@ -153,9 +155,13 @@ const PersonalProjects = () => {
                       </div>
                     </div>
                   )}
+              </>  
+             )
+            }
                 </div>
               </div>
             ))}
+
         </div>
       </div>
     </div>

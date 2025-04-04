@@ -23,7 +23,8 @@ const StoreContextProvider = (props) => {
   // const url ="https://build-up-backend.onrender.com";
 
   const user = getStoredUser();
-
+  
+  // console.log("User from localStorage:", user.id);
   // Display user personal projectsz
   const showProjects = async (userId) => {
     try {
@@ -198,7 +199,8 @@ const getLikeCount = async (postId) => {
     showComment,
     createLike,
     getLikeCount,
-    likesCount
+    likesCount,
+    user,
   };
 
   return (
