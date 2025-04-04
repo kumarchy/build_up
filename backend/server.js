@@ -28,11 +28,11 @@ const PORT = process.env.PORT || 3000;
 app.use(
   cors({
     origin: (origin, callback) => {
-      callback(null, true); // Allows all origins dynamically
+      callback(null, true); 
     },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true, // Allows cookies/tokens
+    credentials: true, 
   })
 );
 

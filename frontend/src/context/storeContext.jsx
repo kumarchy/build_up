@@ -2,6 +2,15 @@ import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 
 export const StoreContext = createContext(null);
+const getStoredUser = () => {
+  try {
+    const user = localStorage.getItem("user");
+    return user ? JSON.parse(user) : null;
+  } catch (error) {
+    console.error("Error parsing user data:", error);
+    return null;
+  }
+};
 
 const StoreContextProvider = (props) => {
   const [showPersonalPost, setShowPersonalPost] = useState([]);
@@ -10,12 +19,12 @@ const StoreContextProvider = (props) => {
   const [comment, setComment] = useState("");
   const [showComment, setShowComment] = useState([]);
 
-  // const url = "http://localhost:3000";
-  const url ="https://build-up-backend.onrender.com";
+  const url = "http://localhost:3000";
+  // const url ="https://build-up-backend.onrender.com";
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = getStoredUser();
 
-  // Display user personal projects
+  // Display user personal projectsz
   const showProjects = async (userId) => {
     try {
       const response = await axios.get(`${url}/api/post/${userId}`);
@@ -118,40 +127,50 @@ const StoreContextProvider = (props) => {
   }
 
   // create like
-  const createLike = async(post_id,type)=>{
-    try{
-      const response = await axios.post(`${url}/api/like`,
-        {
-          post_id,
-          type,
-          user_id: user.id
+ // create like
+const createLike = async (post_id, type) => {
+  try {
+    const response = await axios.post(`${url}/api/like`, {
+      post_id,
+      user_id: user.id,
+      type
+    });
+    
+    if (response.data.success) {
+      // Update the likes count for this post
+      setLikesCount(prev => ({
+        ...prev,
+        [post_id]: {
+          likes: response.data.like_count,
+          dislikes: response.data.dislike_count
         }
-      );
-      if(response.data.success){
-        console.log(`${type} added successfully`);
-      getLikeCount(post_id);
-      }
-    }catch(error){
-      console.log("Error creating like",error);
+      }));
+      
+      return true;
     }
+  } catch (error) {
+    console.log("Error creating like", error);
+    return false;
   }
+};
 
-  const getLikeCount = async (postId) => {
-    try {
-      const response = await axios.get(`${url}/api/like/${postId}`);
-      if (response.data.success) {
-        setLikesCount((prev) => ({
-          ...prev,
-          [postId]: {
-            likes: response.data.likes,
-            dislikes: response.data.dislikes,
-          },
-        }));
-      }
-    } catch (error) {
-      console.log("Error getting like count", error);
+// get like count
+const getLikeCount = async (postId) => {
+  try {
+    const response = await axios.get(`${url}/api/like/${postId}`);
+    if (response.data.success) {
+      setLikesCount(prev => ({
+        ...prev,
+        [postId]: {
+          likes: response.data.like_count,
+          dislikes: response.data.dislike_count,
+        },
+      }));
     }
-  };
+  } catch (error) {
+    console.log("Error getting like count", error);
+  }
+};
  
   const getDaysAgo = (createdAt) => {
     const createdDate = new Date(createdAt);

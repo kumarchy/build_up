@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const Signup = () => {
+const Signup = ({ onLogin }) => {
   const [isSignup, setIsSignup] = useState(true); // Toggle between signup and signin
   const [formData, setFormData] = useState({
     name: "",
@@ -15,15 +15,18 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       if (isSignup) {
         // Signup request
         const response = await axios.post(
-          "https://build-up-backend.onrender.com/api/user/signup",
+          "http://localhost:3000/api/user/signup",
           formData
         );
         if (response.data.success) {
+          const user = response.data.data.user;
+          localStorage.setItem("user", JSON.stringify(user));
+          localStorage.setItem("token", response.data.data.token);
+          onLogin(user); // Pass the user object
           setFormData({
             name: "",
             email: "",
@@ -31,25 +34,24 @@ const Signup = () => {
           });
         }
         alert(response.data.message);
-        setIsSignup(false);
       } else {
         // Signin request
         const response = await axios.post(
-          "https://build-up-backend.onrender.com/api/user/signin",
+          "http://localhost:3000/api/user/signin",
           { email: formData.email, password: formData.password }
         );
         if (response.data.success) {
           const user = response.data.data.user;
-          localStorage.setItem("user", JSON.stringify(user)); // Save user info
-          localStorage.setItem("token", response.data.data.token); // Save token (optional)
-
+          localStorage.setItem("user", JSON.stringify(user));
+          localStorage.setItem("token", response.data.data.token);
+          onLogin(user); // Pass the user object
           setFormData({
             name: "",
             email: "",
             password: "",
           });
         }
-        alert(response.data.message);
+        // alert(response.data.message);
       }
     } catch (error) {
       alert("Error: " + (error.response?.data?.message || "An error occurred"));

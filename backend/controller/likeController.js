@@ -1,9 +1,20 @@
 import prisma from "../db/db.config.js";
 
-// Create or update like/dislike
-export const createLike = async (req, resp) => {
+export const createLike = async (req, res) => {
   try {
-    const { post_id, user_id, reaction } = req.body; // Expecting 'LIKE' or 'DISLIKE'
+    const { post_id, user_id, type } = req.body;
+
+    // First, verify the post exists
+    const postExists = await prisma.post.findUnique({
+      where: { id: Number(post_id) },
+    });
+
+    if (!postExists) {
+      return res.status(404).json({ 
+        status: 404, 
+        message: "Post not found" 
+      });
+    }
 
     // Check if the user already reacted to this post
     const existingReaction = await prisma.like.findFirst({
@@ -15,29 +26,37 @@ export const createLike = async (req, resp) => {
 
     let likeChange = 0;
     let dislikeChange = 0;
+    let message = "";
 
     if (existingReaction) {
-      if (existingReaction.reaction === reaction) {
+      if (existingReaction.reaction === type) {
         // User is removing their reaction
         await prisma.like.delete({
           where: { id: existingReaction.id },
         });
 
-        if (reaction === "LIKE") likeChange = -1;
-        else dislikeChange = -1;
+        if (type === "LIKE") {
+          likeChange = -1;
+          message = "Like removed";
+        } else {
+          dislikeChange = -1;
+          message = "Dislike removed";
+        }
       } else {
         // User is changing their reaction
         await prisma.like.update({
           where: { id: existingReaction.id },
-          data: { reaction },
+          data: { reaction: type },
         });
 
-        if (reaction === "LIKE") {
+        if (type === "LIKE") {
           likeChange = 1;
           dislikeChange = -1;
+          message = "Changed to like";
         } else {
           likeChange = -1;
           dislikeChange = 1;
+          message = "Changed to dislike";
         }
       }
     } else {
@@ -46,42 +65,74 @@ export const createLike = async (req, resp) => {
         data: {
           post_id: Number(post_id),
           user_id: Number(user_id),
-          reaction,
+          reaction: type,
         },
       });
 
-      if (reaction === "LIKE") likeChange = 1;
-      else dislikeChange = 1;
+      if (type === "LIKE") {
+        likeChange = 1;
+        message = "Liked";
+      } else {
+        dislikeChange = 1;
+        message = "Disliked";
+      }
     }
 
-    // ✅ Ensure count never goes below zero
-    const post = await prisma.post.findUnique({
-      where: { id: Number(post_id) },
-      select: { like_count: true, dislike_count: true },
-    });
-
-    await prisma.post.update({
+    // Update post counts
+    const post = await prisma.post.update({
       where: { id: Number(post_id) },
       data: {
-        like_count: Math.max(0, post.like_count + likeChange), // Prevent negative values
-        dislike_count: Math.max(0, post.dislike_count + dislikeChange),
+        like_count: {
+          increment: likeChange
+        },
+        dislike_count: {
+          increment: dislikeChange
+        }
       },
+      select: {
+        like_count: true,
+        dislike_count: true
+      }
     });
 
-    resp.json({ status: 200, message: "Reaction updated successfully" });
+    res.json({ 
+      status: 200, 
+      message,
+      like_count: post.like_count,
+      dislike_count: post.dislike_count
+    });
   } catch (error) {
-    console.error(error);
-    resp.status(500).json({ message: "Something went wrong", error });
+    console.error("Error in createLike:", error);
+    
+    if (error.code === 'P2003') {
+      return res.status(400).json({ 
+        message: "Invalid post or user reference",
+        error: error.meta 
+      });
+    }
+    
+    res.status(500).json({ 
+      message: "Something went wrong", 
+      error: error.message 
+    });
   }
 };
 
-
-
-
-// Show likes and dislikes for a post
-export const showPostLike = async (req, resp) => {
+export const showPostLike = async (req, res) => {
   try {
     const postId = Number(req.params.post_id);
+
+    // Verify post exists first
+    const postExists = await prisma.post.findUnique({
+      where: { id: postId },
+    });
+
+    if (!postExists) {
+      return res.status(404).json({ 
+        status: 404, 
+        message: "Post not found" 
+      });
+    }
 
     const likes = await prisma.like.findMany({
       where: { post_id: postId },
@@ -92,7 +143,6 @@ export const showPostLike = async (req, resp) => {
       },
     });
 
-    // Count likes and dislikes
     const likeCount = await prisma.like.count({
       where: { post_id: postId, reaction: "LIKE" },
     });
@@ -101,7 +151,7 @@ export const showPostLike = async (req, resp) => {
       where: { post_id: postId, reaction: "DISLIKE" },
     });
 
-    resp.json({
+    res.json({
       status: 200,
       data: likes,
       like_count: likeCount,
@@ -109,6 +159,9 @@ export const showPostLike = async (req, resp) => {
     });
   } catch (error) {
     console.error(error);
-    resp.status(500).json({ message: "Something went wrong", error });
+    res.status(500).json({ 
+      message: "Something went wrong", 
+      error: error.message 
+    });
   }
 };

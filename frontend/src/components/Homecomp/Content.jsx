@@ -80,16 +80,16 @@ const Content = () => {
                     </div>
                   </div>
                   <div className="flex-1 space-y-4">
-                    <Link
-                      to={`/projectDetail/${project.id}`}
-                      className="h-64 md:h-80 overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-700 cursor-pointer"
-                    >
-                      <img
-                        src={project.image_url}
-                        alt="Project Preview"
-                        className="h-auto max-h-[300px] w-full object-cover rounded-lg"
-                      />
-                    </Link>
+                  <Link
+                  to={`/projectDetail/${project.id}`}
+                  className="h-64 md:h-80 overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-700 cursor-pointer flex items-stretch"
+                  >
+                 <img
+                 src={project.image_url}
+                 alt="Project Preview"
+                 className="h-full w-full object-cover rounded-lg"
+                 />
+                 </Link>
                   </div>
                 </div>
               </section>

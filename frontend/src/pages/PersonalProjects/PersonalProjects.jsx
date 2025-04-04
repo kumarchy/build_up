@@ -33,17 +33,17 @@ const PersonalProjects = () => {
   };
 
   return (
-    <div className="flex flex-col items-center dark:bg-zinc-900">
-      <div className="md:w-[70%] w-[95%]">
+    <div className="flex flex-col items-center dark:bg-zinc-900 pb-40">
+      <div className="md:w-[80%] w-[95%] lg:flex">
         {showPersonalPost.length > 0 && (
-          <div className="flex gap-5 items-center mt-5 dark:bg-zinc-800 pt-8 pb-8">
-            <div className="flex justify-center items-center md:h-20 md:w-20 h-16 w-16 bg-purple-600 rounded-full text-4xl font-semibold text-white ml-5">
+          <div className="flex lg:flex-col lg:w-56 lg:h-fit lg:text-center lg:p-10 lg:mr-4 lg:rounded-lg lg:mt-8 gap-5 items-center mt-5 dark:bg-zinc-800 pt-8 pb-8 ">
+            <div className="flex justify-center items-center md:h-20 md:w-20 h-16 w-16 bg-purple-600 rounded-full text-4xl font-semibold text-white ml-5 lg:ml-0">
               {showPersonalPost[0]?.user?.name?.charAt(0).toUpperCase() || "U"}
             </div>
             <h1 className="md:text-4xl font-bold text-white text-2xl">
               {showPersonalPost[0]?.user?.name || "Unknown User"}
             </h1>
-          </div>
+            </div>
         )}
         <div className="mt-8 flex justify-start flex-col gap-4">
           {/* Projects */}
@@ -53,24 +53,26 @@ const PersonalProjects = () => {
                 key={project.id}
                 className="mx-auto max-w-5xl w-[100%] overflow-hidden rounded-2xl bg-white shadow-xl dark:bg-zinc-800"
               >
-                <div className="flex flex-col md:flex-row relative">
+                <div className="flex flex-col lg:flex-row relative">
                   {/* Left Section */}
-                  <section className="w-full md:w-[55%] p-6">
+                  <section className="w-full lg:w-[55%] p-6">
                     <div className="flex items-start gap-4">
                       <div className="flex-1 space-y-4">
-                        <Link to={`/projectDetail/${project.id}`} className="h-64 md:h-80 overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-700">
-                          <img
-                            src={project.image_url}
-                            alt="Project Preview"
-                            className="h-full w-full object-cover"
-                          />
+                        <Link to={`/projectDetail/${project.id}`}  className="h-64 md:h-80 overflow-hidden rounded-lg cursor-pointer flex items-center justify-center
+                        ">
+                        <img
+                        src={project.image_url}
+                        alt="Project Preview"
+                        className="h-full w-[95%] object-cover rounded-lg"
+                        />
+
                         </Link>
                       </div>
                     </div>
                   </section>
 
                   {/* Right Section */}
-                  <section className="w-full md:w-[45%] border-t md:border-l md:border-t-0 border-zinc-200 dark:border-zinc-700 p-6">
+                  <section className="w-full lg:w-[45%] border-t md:border-l md:border-t-0 border-zinc-200 dark:border-zinc-700 p-6">
                     <div className="space-y-6">
                       <div>
                         <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">

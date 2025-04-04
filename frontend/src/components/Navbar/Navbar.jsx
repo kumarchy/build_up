@@ -3,8 +3,8 @@ import { Search, User, Menu, X } from 'lucide-react';
 import Profile from '../Profile/Profile';
 import { Link, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/storeContext';
-
-const Navbar = ({ setShowSignup }) => {
+// { setShowSignup }
+const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileVisible, setIsProfileVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -57,7 +57,8 @@ const Navbar = ({ setShowSignup }) => {
               >
                 <User className="h-5 w-5 text-gray-500" />
                 {isProfileVisible && (
-                  <div className="absolute bg-white shadow-lg rounded-lg p-2 top-14" onClick={() => setShowSignup(true)}>
+                  <div className="absolute bg-white shadow-lg rounded-lg p-2 top-14" > 
+                  {/* onClick={() => setShowSignup(true)} */}
                     <Profile />
                   </div>
                 )}
