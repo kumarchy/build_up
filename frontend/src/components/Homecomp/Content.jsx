@@ -1,4 +1,4 @@
-import { Heart, MessageCircle, ThumbsDown } from "lucide-react";
+import {MessageCircle, ThumbsDown ,ThumbsUp} from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { StoreContext } from "../../context/storeContext";
 import { useNavigate, Link } from "react-router-dom";
@@ -20,34 +20,32 @@ const Content = () => {
 
   const navigate = useNavigate();
 
-  const handleLike = (post_id) => {
-    setLikedPosts((prev) => ({
-      ...prev,
-      [post_id]: !prev[post_id], // Toggle like state
-    }));
-
-    setDislikedPosts((prev) => ({
-      ...prev,
-      [post_id]: false, // Reset dislike if liked
-    }));
-
-    createLike(post_id, "LIKE");
-    getLikeCount(post_id);
+  const handleLike = async(postId) => {
+    const success = await createLike(postId, "LIKE");
+    if (success) {
+      setLikedPosts(prev => ({
+        ...prev,
+        [postId]: !prev[postId]
+      }));
+      setDislikedPosts(prev => ({
+        ...prev,
+        [postId]: false
+      }));
+    }
   };
-
-  const handleDislike = (post_id) => {
-    setDislikedPosts((prev) => ({
-      ...prev,
-      [post_id]: !prev[post_id], // Toggle dislike state
-    }));
-
-    setLikedPosts((prev) => ({
-      ...prev,
-      [post_id]: false, // Reset like if disliked
-    }));
-
-    createLike(post_id, "DISLIKE");
-    getLikeCount(post_id);
+  
+  const handleDislike = async(postId) => {
+    const success = await createLike(postId, "DISLIKE");
+    if (success) {
+      setDislikedPosts(prev => ({
+        ...prev,
+        [postId]: !prev[postId]
+      }));
+      setLikedPosts(prev => ({
+        ...prev,
+        [postId]: false
+      }));
+    }
   };
 
   useEffect(() => {
@@ -122,7 +120,7 @@ const Content = () => {
                         className="flex items-center gap-1 rounded-lg px-1 md:px-2 py-1 text-xs md:text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-700 shrink-0"
                         onClick={() => handleLike(project.id)}
                       >
-                        <Heart
+                        <ThumbsUp
                           className={`h-4 w-4 ${
                             likedPosts[project.id] ? "fill-blue-500" : "fill-none"
                           }`}
@@ -130,8 +128,8 @@ const Content = () => {
                         <span className="hidden sm:block">Like</span>
                       </button>
                       <p className="text-white underline">
-                        {likesCount[project.id]?.likes || 0}
-                      </p>
+                      {likesCount[project.id]?.likes || 0}
+                     </p>
                     </div>
 
                     <div className="flex flex-col justify-center items-center">
@@ -147,7 +145,7 @@ const Content = () => {
                         <span className="hidden sm:block">Dislike</span>
                       </button>
                       <p className="text-white underline">
-                        {likesCount[project.id]?.dislikes || 0}
+                      {likesCount[project.id]?.dislikes || 0}
                       </p>
                     </div>
 

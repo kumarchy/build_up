@@ -1,167 +1,152 @@
 import prisma from "../db/db.config.js";
 
 export const createLike = async (req, res) => {
+  const { post_id, userId, reaction } = req.body;
+
+  if (!["LIKE", "DISLIKE"].includes(reaction)) {
+    return res.status(400).json({ error: "Invalid reaction type" });
+  }
+
   try {
-    const { post_id, user_id, type } = req.body;
-
-    // First, verify the post exists
-    const postExists = await prisma.post.findUnique({
-      where: { id: Number(post_id) },
-    });
-
-    if (!postExists) {
-      return res.status(404).json({ 
-        status: 404, 
-        message: "Post not found" 
-      });
-    }
-
-    // Check if the user already reacted to this post
+    // Check if user already reacted to this post
     const existingReaction = await prisma.like.findFirst({
       where: {
-        post_id: Number(post_id),
-        user_id: Number(user_id),
+        user_id: parseInt(userId),
+        post_id: parseInt(post_id),
       },
     });
-
-    let likeChange = 0;
-    let dislikeChange = 0;
-    let message = "";
 
     if (existingReaction) {
-      if (existingReaction.reaction === type) {
-        // User is removing their reaction
+      // If clicking the same reaction again, remove it (toggle)
+      if (existingReaction.reaction === reaction) {
         await prisma.like.delete({
-          where: { id: existingReaction.id },
+          where: {
+            id: existingReaction.id,
+          },
         });
-
-        if (type === "LIKE") {
-          likeChange = -1;
-          message = "Like removed";
-        } else {
-          dislikeChange = -1;
-          message = "Dislike removed";
-        }
-      } else {
-        // User is changing their reaction
+      } 
+      // If clicking different reaction, update it
+      else {
         await prisma.like.update({
-          where: { id: existingReaction.id },
-          data: { reaction: type },
+          where: {
+            id: existingReaction.id,
+          },
+          data: {
+            reaction: reaction,
+          },
         });
-
-        if (type === "LIKE") {
-          likeChange = 1;
-          dislikeChange = -1;
-          message = "Changed to like";
-        } else {
-          likeChange = -1;
-          dislikeChange = 1;
-          message = "Changed to dislike";
-        }
       }
     } else {
-      // User is reacting for the first time
+      // If no existing reaction, create new one
       await prisma.like.create({
         data: {
-          post_id: Number(post_id),
-          user_id: Number(user_id),
-          reaction: type,
+          reaction: reaction,
+          user_id: parseInt(userId),
+          post_id: parseInt(post_id),
         },
       });
-
-      if (type === "LIKE") {
-        likeChange = 1;
-        message = "Liked";
-      } else {
-        dislikeChange = 1;
-        message = "Disliked";
-      }
     }
 
-    // Update post counts
-    const post = await prisma.post.update({
-      where: { id: Number(post_id) },
-      data: {
-        like_count: {
-          increment: likeChange
-        },
-        dislike_count: {
-          increment: dislikeChange
-        }
+    // Get updated counts after the operation
+    const likeCount = await prisma.like.count({
+      where: {
+        post_id: parseInt(post_id),
+        reaction: "LIKE",
       },
-      select: {
-        like_count: true,
-        dislike_count: true
-      }
     });
 
-    res.json({ 
-      status: 200, 
-      message,
-      like_count: post.like_count,
-      dislike_count: post.dislike_count
+    const dislikeCount = await prisma.like.count({
+      where: {
+        post_id: parseInt(post_id),
+        reaction: "DISLIKE",
+      },
     });
+
+    return res.json({
+      success: true,
+      data: {
+        counts: {
+          likes: likeCount,
+          dislikes: dislikeCount,
+        },
+      },
+    });
+
   } catch (error) {
     console.error("Error in createLike:", error);
-    
-    if (error.code === 'P2003') {
-      return res.status(400).json({ 
-        message: "Invalid post or user reference",
-        error: error.meta 
-      });
-    }
-    
-    res.status(500).json({ 
-      message: "Something went wrong", 
-      error: error.message 
+    return res.status(500).json({
+      success: false,
+      error: "Internal server error",
+      message: error.message,
     });
   }
 };
 
 export const showPostLike = async (req, res) => {
   try {
-    const postId = Number(req.params.post_id);
+    const postId = parseInt(req.params.post_id);
 
-    // Verify post exists first
+    // Verify post exists
     const postExists = await prisma.post.findUnique({
       where: { id: postId },
     });
 
     if (!postExists) {
-      return res.status(404).json({ 
-        status: 404, 
-        message: "Post not found" 
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
       });
     }
 
-    const likes = await prisma.like.findMany({
+    // Get all reactions for this post with user details
+    const reactions = await prisma.like.findMany({
       where: { post_id: postId },
       include: {
         user: {
-          select: { name: true, email: true },
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+    });
+
+    // Count likes and dislikes
+    const likeCount = await prisma.like.count({
+      where: {
+        post_id: postId,
+        reaction: "LIKE",
+      },
+    });
+
+    const dislikeCount = await prisma.like.count({
+      where: {
+        post_id: postId,
+        reaction: "DISLIKE",
+      },
+    });
+
+    return res.json({
+      success: true,
+      data: {
+        reactions,
+        counts: {
+          likes: likeCount,
+          dislikes: dislikeCount,
         },
       },
     });
 
-    const likeCount = await prisma.like.count({
-      where: { post_id: postId, reaction: "LIKE" },
-    });
-
-    const dislikeCount = await prisma.like.count({
-      where: { post_id: postId, reaction: "DISLIKE" },
-    });
-
-    res.json({
-      status: 200,
-      data: likes,
-      like_count: likeCount,
-      dislike_count: dislikeCount,
-    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ 
-      message: "Something went wrong", 
-      error: error.message 
+    console.error("Error in showPostLike:", error);
+    return res.status(500).json({
+      success: false,
+      error: "Internal server error",
+      message: error.message,
     });
   }
 };

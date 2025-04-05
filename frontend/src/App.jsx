@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import Form from "./pages/Form/Form";
 import Signup from "./components/Signup/Signup";
@@ -12,14 +12,18 @@ const App = () => {
 
   useEffect(() => {
     const user = localStorage.getItem("user");
-    if (user) {
-      setIsLoggedIn(true);
-    }
+    setIsLoggedIn(!!user);
   }, []);
 
-  const handleLogin = (username) => {
-    localStorage.setItem("user", username); 
+  const handleLogin = (user) => {
+    // User is already stored in localStorage by Signup component
     setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
   };
 
   return (
@@ -28,13 +32,13 @@ const App = () => {
         <Signup onLogin={handleLogin} />
       ) : (
         <>
-          <Navbar />
+          <Navbar onLogout={handleLogout} />
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/projectDetail/:projectId" element={<ProjectDetail />} />
             <Route path="/personalProjects/:userId" element={<PersonalProjects />} />
             <Route path="/form" element={<Form />} />
-            <Route path="/signup" element={<Navigate to="/" />} /> 
+            <Route path="/signup" element={<Navigate to="/" />} />
           </Routes>
         </>
       )}

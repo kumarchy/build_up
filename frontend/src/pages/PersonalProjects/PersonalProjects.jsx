@@ -78,6 +78,7 @@ const PersonalProjects = () => {
                         <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">
                           {project.title}
                         </h1>
+                        <p className="text-zinc-500 text-sm">{project.type}</p>
                         <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
                         Posted by {project.user?.name} •{" "}
                         {getDaysAgo(project.created_at)}

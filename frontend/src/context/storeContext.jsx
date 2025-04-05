@@ -127,23 +127,22 @@ const StoreContextProvider = (props) => {
     }
   }
 
-  // create like
  // create like
-const createLike = async (post_id, type) => {
+ const createLike = async (postId, reaction) => {
   try {
     const response = await axios.post(`${url}/api/like`, {
-      post_id,
-      user_id: user.id,
-      type
+      post_id: postId,
+      userId: user.id,
+      reaction
     });
     
     if (response.data.success) {
-      // Update the likes count for this post
+      // Update the likes count based on the response
       setLikesCount(prev => ({
         ...prev,
-        [post_id]: {
-          likes: response.data.like_count,
-          dislikes: response.data.dislike_count
+        [postId]: {
+          likes: response.data.data?.counts?.likes || 0,
+          dislikes: response.data.data?.counts?.dislikes || 0
         }
       }));
       
@@ -163,8 +162,8 @@ const getLikeCount = async (postId) => {
       setLikesCount(prev => ({
         ...prev,
         [postId]: {
-          likes: response.data.like_count,
-          dislikes: response.data.dislike_count,
+          likes: response.data.data?.counts?.likes || 0,
+          dislikes: response.data.data?.counts?.dislikes || 0,
         },
       }));
     }

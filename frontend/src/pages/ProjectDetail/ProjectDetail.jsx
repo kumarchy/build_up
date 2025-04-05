@@ -23,12 +23,12 @@ const ProjectDetail = () => {
   const techStackArray = project.techStack
     ? project.techStack.split(",").map((tech) => tech.trim())
     : [];
-
+  
   return (
     <div className="relative flex flex-col items-center dark:bg-zinc-900 text-white">
       <div className="lg:w-[70%] w-[95%]">
-        <div className="flex items-center gap-5 mb-5 mt-5">
-          <h1 className="sm:text-4xl text-2xl sm:font-bold font-bold ">
+        <div className="flex items-center gap-5 mt-5 bg-blue-500 p-5">
+          <h1 className="sm:text-4xl text-2xl sm:font-bold font-bold">
             {project.title}
           </h1>
         </div>
