@@ -123,7 +123,7 @@ build-up/
 └── README.md                 # Project documentation
 ```
 ## Screenshots 
-![image](https://github.com/kumarchy/FullStack-Attendance-System/blob/c9b36b92cf646ad52528e429b1d194074581dd94/Screenshot%202024-10-12%20005711.png)
+![image](https://github.com/kumarchy/build_up/blob/main/Screenshot%20From%202025-04-10%2018-50-11.png?raw=true)
 
 ## Contributing 
 Contributions are welcome! If you'd like to contribute, please follow these steps:
