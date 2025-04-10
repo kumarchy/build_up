@@ -130,7 +130,8 @@ build-up/
 )
 ![image](https://github.com/kumarchy/build_up/blob/main/Screenshot%20From%202025-04-10%2018-51-37.png?raw=true
 )
-
+![image](https://github.com/kumarchy/build_up/blob/main/Screenshot%20From%202025-04-10%2018-51-15.png?raw=true
+)
 ## Contributing 
 Contributions are welcome! If you'd like to contribute, please follow these steps:
 - Fork the repository.
