@@ -124,6 +124,8 @@ build-up/
 ```
 ## Screenshots 
 ![image](https://github.com/kumarchy/build_up/blob/main/Screenshot%20From%202025-04-10%2018-50-11.png?raw=true)
+![image](https://github.com/kumarchy/build_up/blob/main/Screenshot%20From%202025-04-10%2018-50-29.png?raw=true
+)
 
 ## Contributing 
 Contributions are welcome! If you'd like to contribute, please follow these steps:
